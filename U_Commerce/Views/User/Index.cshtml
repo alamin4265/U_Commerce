@@ -1,0 +1,91 @@
+﻿@model IEnumerable<U_Commerce.Models.User>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Users</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Basic Info
+        </th>
+        <th>
+            Others Info
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Image)
+        </th>
+        <th>
+            Activity
+        </th>
+        <th>
+            Action
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)<br />
+                @Html.DisplayFor(modelItem => item.Contact)<br />
+                @Html.DisplayFor(modelItem => item.Email)<br />
+                @if (item.Gender == 1)
+                {
+                    @Html.Raw("Male")
+                }
+                else
+                {
+                    @Html.Raw("Female")
+                }
+            </td>
+            <td>
+                Join :@Html.DisplayFor(modelItem => item.JoinDate)<br />
+                Ip   :@Html.DisplayFor(modelItem => item.Ip)<br />
+                DOB  :@Html.DisplayFor(modelItem => item.DateOfBirth)
+            </td>
+            <td>
+                <address> @Html.DisplayFor(modelItem => item.Address)</address>
+                <b>@Html.DisplayFor(modelItem => item.City.Name)</b><br />
+                @if (item.UserVerified==null)
+                {
+                    @Html.Raw("Not Verified")
+                }
+                else
+                {
+                    @Html.Raw("Verified")
+                }
+                <br />
+                @if (item.AdminUser != null)
+                {
+                    @Html.Raw("Administrator")
+                }
+            </td>
+            <td>
+                <img src="../Uploads/UserImages/@(item.Id.ToString()+"_"+item.Image)" height="100" width="90" />
+
+            </td>
+            <td>
+                Comment : <a href="">@item.ProductComments.Count</a><br />
+                Like    : <a href="">@item.ProductLikes.Count()</a><br />
+                Rating  : <a href="">@item.ProductRatings.Count</a><br />
+                Product : <a href="">@item.Products.Count()</a><br/>
+                Archive : <a href="">@item.ProductArchives.Count()</a>
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>

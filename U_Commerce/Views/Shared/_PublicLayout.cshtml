@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("U-Commerce", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active">@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("All Product", "All", "Product")</li>
+                    <li><a href="../"></a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            Brands
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            @{
+                                var brands = new U_Commerce.Models.MyCon().ProductBrands;
+                                foreach (var brand in brands)
+                                {
+                                    if (brand.Products.Count() > 0)
+                                    {
+                                        @Html.Raw("<li><a href=\"../Product/All?brand=" + brand.Id.ToString() + "\">" + brand.Name + " ( " + brand.Products.Count().ToString() + " ) " + "</a></li>")
+                                    }
+                                }
+                            }
+
+                        </ul>
+                    </li>
+                    @{ if (Session["Type"] != null || Session["Type"].ToString() != "")
+                        {
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    @Session["Name"].ToString()
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+
+                                    <li>@Html.ActionLink("My Account", "MyAccount", "User")</li>
+                                    <li>@Html.ActionLink("My Product", "MyProduct", "User")</li>
+                                    <li><a href="../LoginHistory/MyLoginHistory">Login History</a></li>
+
+                                </ul>
+                            </li>
+                            <li>@Html.ActionLink("Live Message", "Index", "Message")</li>
+                        }
+
+                    }
+
+
+
+
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            Category
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            @{
+                                var categories = new U_Commerce.Models.MyCon().ProductCategories.Where(c => c.ProductCategory2 == null);
+                                foreach (var category in categories)
+                                {
+                                    if (category.ProductCategory1.Count() > 0)
+                                    {
+                                        <li class="dropdown-submenu">
+                                            <a class="test"" href="../Product/category/@category.Id">
+                                                @category.Name
+                                                <span class="caret"></span>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                @foreach (var chind in category.ProductCategory1)
+                                                {
+                                                    <li><a href="../Product/Category/@chind.Id">@chind.Name</a></li>
+                                                }
+                                            </ul>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li><a href="../Product/Category/@category.Id">@category.Name</a></li>
+                                    }
+                                }
+                            }
+                        </ul>
+                    </li>
+
+
+                </ul>
+                @Html.Partial("LoginPablic")
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    <script>
+        $(document).ready(function () {
+            $('.dropdown-submenu a.test').on("click", function (e) {
+                $(this).next('ul').toggle();
+                e.stopPropagation();
+                e.preventDefault();
+            });
+        });
+    </script>
+</body>
+</html>

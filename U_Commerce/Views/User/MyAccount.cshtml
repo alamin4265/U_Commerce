@@ -1,0 +1,11 @@
+﻿@using U_Commerce.Models;   
+@{
+    ViewBag.Title = "MyAccount";
+}
+
+<h2>MyAccount</h2>
+
+
+<div>
+    MyProduct : <a href="../Product?User=@Session["Id"].ToString()">@(new MyCon().Products.Count(p => p.UserId == (int) Session["Id"].ToString()))</a>
+</div>
